@@ -1,0 +1,4 @@
+{
+    "colorize.languages": ["typescript", "javascript", "css", "scss"],
+    "vscode-color-picker.languages": ["python", "javascript", "typescript", "typescriptreact"]
+}

@@ -1,13 +1,12 @@
-import Constants from 'expo-constants'
 import { StyleSheet, View } from 'react-native'
 import RepositoryList from './RepositoryList'
 import Text from './Text'
-
+import AppBar from './AppBar'
 const styles = StyleSheet.create({
   container: {
-    marginTop: Constants.statusBarHeight,
     flexGrow: 1,
     flexShrink: 1,
+    backgroundColor: '#e1e4e8',
   },
   text: {
     color: 'grey',
@@ -32,23 +31,40 @@ const FancyText = ({ isBlue, isBig, children }) => {
 
   return <Text style={textStyles}>{children}</Text>;
 };
+
+
+const stylesFlex = StyleSheet.create({
+  flexContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  flexItemA: {
+    flexGrow: 0,
+    backgroundColor: 'green',
+  },
+  flexItemB: {
+    flexGrow: 1,
+    backgroundColor: 'blue',
+  },
+});
+
+const FlexboxExample = () => {
+  return (
+    <View style={stylesFlex.flexContainer}>
+      <View style={stylesFlex.flexItemA}>
+        <Text>Flex item A</Text>
+      </View>
+      <View style={stylesFlex.flexItemB}>
+        <Text>Flex item B</Text>
+      </View>
+    </View>
+  );
+};
 const Main = () => {
   return (
     <View style={styles.container}>
-      <Text>Simple text</Text>
-      <Text style={{ paddingBottom: 10 }}>Text with custom style</Text>
-      <Text fontWeight="bold" fontSize="subheading">
-        Bold subheadingd
-      </Text>
-      <Text color="textSecondary">Text with secondary color</Text>
-      <Text>Rate Repository Application</Text>
+      <AppBar />
       <RepositoryList />
-      <FancyText>Simple text</FancyText>
-      <FancyText isBlue>Blue text</FancyText>
-      <FancyText isBig>Big text</FancyText>
-      <FancyText isBig isBlue>
-        Big blue text
-      </FancyText>
     </View>
   )
 }
