@@ -3,8 +3,7 @@ import FormikTextInput from './FormikTextInput'
 import { Formik } from 'formik'
 import * as yup from 'yup'
 import useSignIn from '../hooks/useSignIn'
-import LoadingSpinner from './LoadingSpinner'
-import ErrorPage from './ErrorPage'
+import { useNavigate } from 'react-router-native'
 
 const validationSchema = yup.object().shape({
   username: yup
@@ -59,17 +58,14 @@ const LogInForm = ({ onSubmit }) => {
 }
 
 const SignIn = () => {
-  const [signIn, result] = useSignIn()
+  const Navigate = useNavigate()
+  const [signIn] = useSignIn()
 
   const onSubmit = async (values) => {
     const { username, password } = values
-    signIn({ username, password })
-      .then((res) => {
-        console.log(res)
-      })
+    await signIn({ username, password })
+    Navigate('/')
   }
-
-  if (result.loading) return <LoadingSpinner visible={result.loading} />
 
   return (
     <Formik
