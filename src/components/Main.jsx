@@ -1,7 +1,9 @@
 import { StyleSheet, View } from 'react-native'
+import { Route, Routes, Navigate } from 'react-router-native'
 import RepositoryList from './RepositoryList'
-import Text from './Text'
+import SignIn from './SignIn'
 import AppBar from './AppBar'
+import BodyMassIndexCalculator from './Bmi'
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
@@ -20,51 +22,31 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
 });
+import { React } from 'react';
+import { Text,Platform } from 'react-native';
 
-
-const FancyText = ({ isBlue, isBig, children }) => {
-  const textStyles = [
-    styles.text,
-    isBlue && styles.blueText,
-    isBig && styles.bigText,
-  ];
-
-  return <Text style={textStyles}>{children}</Text>;
-};
-
-
-const stylesFlex = StyleSheet.create({
-  flexContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-  },
-  flexItemA: {
-    flexGrow: 0,
-    backgroundColor: 'green',
-  },
-  flexItemB: {
-    flexGrow: 1,
-    backgroundColor: 'blue',
+const styles2 = StyleSheet.create({
+  text: {
+    color: Platform.OS === 'android' ? 'green' : 'blue',
   },
 });
 
-const FlexboxExample = () => {
-  return (
-    <View style={stylesFlex.flexContainer}>
-      <View style={stylesFlex.flexItemA}>
-        <Text>Flex item A</Text>
-      </View>
-      <View style={stylesFlex.flexItemB}>
-        <Text>Flex item B</Text>
-      </View>
-    </View>
-  );
+const WhatIsMyPlatform = () => {
+  return <Text style={styles2.text}>Your platform is: {Platform.OS}</Text>;
 };
+
+
 const Main = () => {
   return (
     <View style={styles.container}>
       <AppBar />
-      <RepositoryList />
+      <WhatIsMyPlatform />
+      <Routes>
+        <Route path="/" element={<RepositoryList />} exact />
+        <Route path="/signin" element={<SignIn />} />
+        <Route path="/bmi" element={<BodyMassIndexCalculator />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
     </View>
   )
 }

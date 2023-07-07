@@ -47,6 +47,8 @@ const RepositoryItem = ({
   const styles = StyleSheet.create({
     container: {
       backgroundColor: 'white',
+      padding: 5,
+      
     },
     flexContainerRow: {
       display: 'flex',
@@ -55,6 +57,7 @@ const RepositoryItem = ({
     flexContainerColumn: {
       display: 'flex',
       flexDirection: 'column',
+      flexShrink: 1
     },
     mainText: {
       color: theme.colors.textPrimary,

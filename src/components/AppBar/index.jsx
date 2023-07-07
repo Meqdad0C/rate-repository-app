@@ -1,9 +1,11 @@
-import { View, StyleSheet, Pressable } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 import Constants from 'expo-constants'
 import Text from '../Text'
 import theme from '../../theme'
+import { Link } from 'react-router-native'
+import { ScrollView } from 'react-native'
 
-const PreesableText = (props) => {
+const LinkText = (props) => {
   const styles = StyleSheet.create({
     text: {
       color: 'white',
@@ -18,24 +20,11 @@ const PreesableText = (props) => {
       padding: 10,
     },
   })
-  const handlePress = (e) => {
-    console.log('Pressed');
-    e.persist()
-    const Button = e.target
-    Button.setNativeProps({
-      style: styles.pressedText,
-    })
-    setTimeout(() => {
-      e.target.setNativeProps({
-        style: styles.text,
-      })
-    }, 1000)
-  }
 
   return (
-    <Pressable onPress={handlePress}>
+    <Link to={props.to}>
       <Text style={styles.text}>{props.children}</Text>
-    </Pressable>
+    </Link>
   )
 }
 
@@ -44,7 +33,6 @@ const AppBar = () => {
     container: {
       paddingTop: Constants.statusBarHeight,
       backgroundColor: theme.colors.appBarBackground,
-      opacity: 0.9,
       display: 'flex',
       flexDirection: 'row',
     },
@@ -58,7 +46,11 @@ const AppBar = () => {
 
   return (
     <View style={styles.container}>
-      <PreesableText>Repositories</PreesableText>
+      <ScrollView horizontal>
+        <LinkText to={'/'}>Repositories</LinkText>
+        <LinkText to={'/signin'}>Sign in</LinkText>
+        <LinkText to={'/bmi'}>Bmi</LinkText>
+      </ScrollView>
     </View>
   )
 }
