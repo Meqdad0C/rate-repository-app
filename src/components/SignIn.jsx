@@ -2,6 +2,9 @@ import { Text, Pressable, View, StyleSheet } from 'react-native'
 import FormikTextInput from './FormikTextInput'
 import { Formik } from 'formik'
 import * as yup from 'yup'
+import useSignIn from '../hooks/useSignIn'
+import LoadingSpinner from './LoadingSpinner'
+import ErrorPage from './ErrorPage'
 
 const validationSchema = yup.object().shape({
   username: yup
@@ -56,12 +59,17 @@ const LogInForm = ({ onSubmit }) => {
 }
 
 const SignIn = () => {
-  const onSubmit = (values) => {
-    const username = values.username
-    const password = values.password
-    console.log(`Your username is: ${username}`)
-    console.log(`Your password is: ${password}`)
+  const [signIn, result] = useSignIn()
+
+  const onSubmit = async (values) => {
+    const { username, password } = values
+    signIn({ username, password })
+      .then((res) => {
+        console.log(res)
+      })
   }
+
+  if (result.loading) return <LoadingSpinner visible={result.loading} />
 
   return (
     <Formik

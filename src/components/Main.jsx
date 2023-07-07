@@ -22,25 +22,14 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
 });
-import { React } from 'react';
-import { Text,Platform } from 'react-native';
 
-const styles2 = StyleSheet.create({
-  text: {
-    color: Platform.OS === 'android' ? 'green' : 'blue',
-  },
-});
 
-const WhatIsMyPlatform = () => {
-  return <Text style={styles2.text}>Your platform is: {Platform.OS}</Text>;
-};
 
 
 const Main = () => {
   return (
     <View style={styles.container}>
       <AppBar />
-      <WhatIsMyPlatform />
       <Routes>
         <Route path="/" element={<RepositoryList />} exact />
         <Route path="/signin" element={<SignIn />} />
