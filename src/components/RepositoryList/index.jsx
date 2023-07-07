@@ -11,9 +11,22 @@ const styles = StyleSheet.create({
   },
 })
 
+export const RepositoryListContainer = ({ repositories }) => {
+  const repositoryNodes = repositories
+    ? repositories.edges.map((edge) => edge.node)
+    : []
+  return (
+    <FlatList
+      data={repositoryNodes}
+      ItemSeparatorComponent={ItemSeparator}
+      renderItem={({ item }) => <RepositoryItem {...item} />}
+    />
+  )
+}
+
 const ItemSeparator = () => <View style={styles.separator} />
 
-const RepositoryList =  () => {
+const RepositoryList = () => {
   const { data, error, loading } = useQuery(ALL_REPOSIORIES, {
     fetchPolicy: 'cache-and-network',
   })
@@ -22,22 +35,11 @@ const RepositoryList =  () => {
     console.log('refetching...')
     return null
   }
-  
+
   if (loading) return <LoadingSpinner visible={loading} />
-  if (error)
-    return (
-      <ErrorPage errorMessage={error.message} onRetry={refetch} />
-    )
+  if (error) return <ErrorPage errorMessage={error.message} onRetry={refetch} />
 
-  const repositoryNodes = data.repositories.edges.map((edge) => edge.node)
-
-  return (
-    <FlatList
-      data={repositoryNodes}
-      ItemSeparatorComponent={ItemSeparator}
-      renderItem={({ item }) => <RepositoryItem {...item} />}
-    />
-  )
+  return <RepositoryListContainer repositories={data.repositories} />
 }
 
 export default RepositoryList

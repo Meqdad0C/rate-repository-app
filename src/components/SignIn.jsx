@@ -23,7 +23,7 @@ const initialValues = {
   password: '',
 }
 
-const LogInForm = ({ onSubmit }) => {
+export const LogInForm = ({ onSubmit }) => {
   const styles = StyleSheet.create({
     container: {
       display: 'flex',
