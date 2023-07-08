@@ -6,6 +6,7 @@ import AppBar from './AppBar'
 import RepositoryView from './RepositoryView'
 import ReviewView from './ReviewView'
 import SignUpView from './SignUp'
+import MyReviews from './MyReviews'
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
@@ -35,6 +36,7 @@ const Main = () => {
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUpView />} />
         <Route path="/review" element={<ReviewView />} />
+        <Route path='/reviews' element={<MyReviews />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </View>

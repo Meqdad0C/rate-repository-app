@@ -75,7 +75,7 @@ const SingleRepository = ({ repository, url }) => {
     </RepositoryItem>
   )
 }
-const RatingCircle = ({ rating }) => {
+export const RatingCircle = ({ rating }) => {
   const styles = StyleSheet.create({
     container: {
       width: 50,
