@@ -1,9 +1,10 @@
-import { FlatList, View, StyleSheet } from 'react-native'
-import RepositoryItem from './RepositoryItem'
+import { FlatList, View, StyleSheet, Pressable } from 'react-native'
+import RepositoryItemContainer from './RepositoryItem'
 import { useQuery } from '@apollo/client'
 import { ALL_REPOSIORIES } from '../../graphql/queries'
 import LoadingSpinner from '../LoadingSpinner'
 import ErrorPage from '../ErrorPage'
+import { useNavigate } from 'react-router-native'
 
 const styles = StyleSheet.create({
   separator: {
@@ -19,7 +20,7 @@ export const RepositoryListContainer = ({ repositories }) => {
     <FlatList
       data={repositoryNodes}
       ItemSeparatorComponent={ItemSeparator}
-      renderItem={({ item }) => <RepositoryItem {...item} />}
+      renderItem={({ item }) => <RepositoryItemContainer {...item} />}
     />
   )
 }

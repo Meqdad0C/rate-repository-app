@@ -1,5 +1,6 @@
-import { Image, Text, View, StyleSheet } from 'react-native'
+import { Image, Text, View, StyleSheet, Pressable } from 'react-native'
 import theme from '../../theme'
+import { useNavigate } from 'react-router-native'
 
 const Card = ({ number, text }) => {
   const styles = StyleSheet.create({
@@ -10,7 +11,6 @@ const Card = ({ number, text }) => {
       marginTop: 0,
       alignItems: 'center',
       justifyContent: 'center',
-      
     },
     number: {
       color: theme.colors.textPrimary,
@@ -34,7 +34,65 @@ const Card = ({ number, text }) => {
   )
 }
 
-const RepositoryItem = ({
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: 'white',
+    padding: 5,
+  },
+  flexContainerRow: {
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  flexContainerColumn: {
+    display: 'flex',
+    flexDirection: 'column',
+    flexShrink: 1,
+  },
+  mainText: {
+    color: theme.colors.textPrimary,
+    fontSize: theme.fontSizes.subheading,
+    fontWeight: theme.fontWeights.bold,
+  },
+  subText: {
+    color: theme.colors.textSecondary,
+    fontSize: theme.fontSizes.subheading,
+    fontWeight: theme.fontWeights.normal,
+  },
+  image: {
+    width: 50,
+    height: 50,
+    margin: 10,
+    borderRadius: 5,
+  },
+  languageTag: {
+    backgroundColor: theme.colors.primary,
+    color: 'white',
+    padding: 5,
+    marginTop: 5,
+    borderRadius: 5,
+    alignSelf: 'flex-start',
+    fontWeight: theme.fontWeights.bold,
+  },
+  stats: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+  },
+  button: {
+    backgroundColor: theme.colors.primary,
+    color: 'white',
+    padding: 10,
+    borderRadius: 5,
+    fontWeight: theme.fontWeights.bold,
+    fontSize: theme.fontSizes.subheading,
+    textAlign: 'center',
+    minWidth: '90%',
+    alignSelf: 'center',
+  },
+})
+
+export const RepositoryItemContainer = ({
+  id,
   fullName,
   description,
   language,
@@ -44,52 +102,38 @@ const RepositoryItem = ({
   ratingAverage,
   ownerAvatarUrl,
 }) => {
-  const styles = StyleSheet.create({
-    container: {
-      backgroundColor: 'white',
-      padding: 5,
-      
-    },
-    flexContainerRow: {
-      display: 'flex',
-      flexDirection: 'row',
-    },
-    flexContainerColumn: {
-      display: 'flex',
-      flexDirection: 'column',
-      flexShrink: 1
-    },
-    mainText: {
-      color: theme.colors.textPrimary,
-      fontSize: theme.fontSizes.subheading,
-      fontWeight: theme.fontWeights.bold,
-    },
-    subText: {
-      color: theme.colors.textSecondary,
-      fontSize: theme.fontSizes.subheading,
-      fontWeight: theme.fontWeights.normal,
-    },
-    image: {
-      width: 50,
-      height: 50,
-      margin: 10,
-      borderRadius: 5,
-    },
-    languageTag: {
-      backgroundColor: theme.colors.primary,
-      color: 'white',
-      padding: 5,
-      marginTop: 5,
-      borderRadius: 5,
-      alignSelf: 'flex-start',
-      fontWeight: theme.fontWeights.bold,
-    },
-    stats: {
-      display: 'flex',
-      flexDirection: 'row',
-      justifyContent: 'space-around',
-    },
-  })
+  const repository = {
+    id,
+    fullName,
+    description,
+    language,
+    stargazersCount,
+    forksCount,
+    reviewCount,
+    ratingAverage,
+    ownerAvatarUrl,
+  }
+
+  const Navigate = useNavigate()
+
+  return (
+    <Pressable onPress={() => Navigate(`/repository/${id}`)}>
+      <RepositoryItem {...repository} />
+    </Pressable>
+  )
+}
+
+export const RepositoryItem = (props) => {
+  const {
+    fullName,
+    description,
+    language,
+    stargazersCount,
+    forksCount,
+    reviewCount,
+    ratingAverage,
+    ownerAvatarUrl,
+  } = props
 
   return (
     <View style={styles.container}>
@@ -107,8 +151,9 @@ const RepositoryItem = ({
         <Card number={reviewCount} text="Reviews" />
         <Card number={ratingAverage} text="Rating" />
       </View>
+        {props?.children}
     </View>
   )
 }
 
-export default RepositoryItem
+export default RepositoryItemContainer

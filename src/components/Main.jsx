@@ -3,7 +3,7 @@ import { Route, Routes, Navigate } from 'react-router-native'
 import RepositoryList from './RepositoryList'
 import SignIn from './SignIn'
 import AppBar from './AppBar'
-import BodyMassIndexCalculator from './Bmi'
+import RepositoryView from './RepositoryView'
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
@@ -32,8 +32,8 @@ const Main = () => {
       <AppBar />
       <Routes>
         <Route path="/" element={<RepositoryList />} exact />
+        <Route path="/repository/:id" element={<RepositoryView />} />
         <Route path="/signin" element={<SignIn />} />
-        <Route path="/bmi" element={<BodyMassIndexCalculator />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </View>
