@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react'
 import { Searchbar } from 'react-native-paper'
 import { useDebounce } from 'use-debounce'
 import { useNavigate } from 'react-router-native'
+import useRepositories from '../../hooks/useRepositoriesQL'
 const styles = StyleSheet.create({
   separator: {
     height: 10,
@@ -96,10 +97,15 @@ const Picker = ({ sort }) => {
   )
 }
 
-export const RepositoryListContainer = ({ repositories, sort, refetch }) => {
+export const RepositoryListContainer = ({ repositories, sort, refetch,fetchMore }) => {
   const repositoryNodes = repositories
     ? repositories.edges.map((edge) => edge.node)
     : []
+
+  const onEndReached = () => {
+    fetchMore()
+  }
+
   return (
     <FlatList
       data={repositoryNodes}
@@ -110,6 +116,7 @@ export const RepositoryListContainer = ({ repositories, sort, refetch }) => {
           <Picker sort={sort} />
         </>
       }
+      onEndReached={onEndReached}
       renderItem={({ item }) => <RepositoryItemContainer {...item} />}
     />
   )
@@ -121,9 +128,9 @@ const RepositoryList = () => {
   const Navigate = useNavigate()
   const [order, setOrder] = useState('CREATED_AT')
   const [direction, setDirection] = useState('DESC')
-  const { data, error, loading, refetch } = useQuery(ALL_REPOSIORIES, {
+  const { repositories, error, loading, refetch, fetchMore } = useRepositories({
     fetchPolicy: 'cache-and-network',
-    variables: { orderBy: order, orderDirection: direction, refetch },
+    variables: { orderBy: order, orderDirection: direction, first: 5 },
     onError: (error) => {
       console.log(error)
     },
@@ -139,9 +146,10 @@ const RepositoryList = () => {
 
   return (
     <RepositoryListContainer
-      repositories={data.repositories}
+      repositories={repositories}
       sort={{ setOrder, setDirection }}
       refetch={refetch}
+      fetchMore={fetchMore}
     />
   )
 }

@@ -6,6 +6,9 @@ import { View, Text, Pressable, FlatList } from 'react-native'
 import * as Linking from 'expo-linking'
 import theme from '../theme'
 import { StyleSheet } from 'react-native'
+import  useSingleRepositories from '../hooks/useSingleRepository'
+import LoadingSpinner from './LoadingSpinner'
+import ErrorPage from './ErrorPage'
 const styles = StyleSheet.create({
   container: {
     backgroundColor: 'white',
@@ -120,24 +123,34 @@ const ItemSeparator = () => <View style={styles.separator} />
 
 const RepositoryView = () => {
   const id = useParams().id
-  const { data, loading } = useQuery(SINGLE_REPOSITORY, {
-    variables: { id },
-    fetchPolicy: 'cache and network',
+  const { repo, error, loading, refetch, fetchMore } = useSingleRepositories({
+    fetchPolicy: 'network',
+    variables: { id, first: 5 },
+    onError: (error) => {
+      console.log(error)
+    },
   })
 
-  if (loading) {
-    return <Text>Loading...</Text>
+  console.log('fetching single repo...')
+
+  if (loading) return <LoadingSpinner visible={loading} />
+  if (error) return <ErrorPage errorMessage={error.message} onRetry={refetch} />
+
+  const onEndReach = () => {
+    console.log('end reached')
+    fetchMore()
   }
-  const repo = data.repository
+
   const url = repo.url
   return (
     <FlatList
       data={repo.reviews.edges}
-      renderItem={({ item }) => <ReviewItem review={item.node} />}
       ItemSeparatorComponent={ItemSeparator}
       ListHeaderComponent={() => (
         <SingleRepository repository={repo} url={url} />
       )}
+      onEndReached={onEndReach}
+      renderItem={({ item }) => <ReviewItem review={item.node} />}
     />
   )
 }

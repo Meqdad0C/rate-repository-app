@@ -49,9 +49,6 @@ const ReviewForm = ({ onSubmit }) => {
       <Pressable onPress={onSubmit} style={styles.button}>
         <Text style={styles.text}>Create a review</Text>
       </Pressable>
-      <Pressable onPress={onSubmit} style={styles.button}>
-        <Text style={styles.text}>Create a review</Text>
-      </Pressable>
     </View>
   )
 }
