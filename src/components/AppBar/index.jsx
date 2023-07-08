@@ -2,13 +2,14 @@ import { View, StyleSheet, Pressable } from 'react-native'
 import Constants from 'expo-constants'
 import Text from '../Text'
 import theme from '../../theme'
-import { Link } from 'react-router-native'
+import { Link, useNavigate } from 'react-router-native'
 import { ScrollView } from 'react-native'
 import { useLazyQuery } from '@apollo/client'
 import { AUTHORIZED_USER } from '../../graphql/queries'
 import { useAuthStorage } from '../../hooks/useAuthStorage'
 import { useApolloClient } from '@apollo/client'
 import { useState, useEffect } from 'react'
+
 const LinkText = (props) => {
   const styles = StyleSheet.create({
     text: {
@@ -47,6 +48,7 @@ const AppBar = () => {
       padding: 10,
     },
   })
+  const Navigate = useNavigate()
   const authStorage = useAuthStorage()
   const apolloClient = useApolloClient()
   const [queryMe, { called, loading, data }] = useLazyQuery(AUTHORIZED_USER)
@@ -64,9 +66,11 @@ const AppBar = () => {
 
   const handleSignOut = async () => {
     console.log('sign out')
+
     await authStorage.removeAccessToken()
     apolloClient.resetStore()
     setUser(null)
+    Navigate('/')
   }
 
   return (
@@ -74,9 +78,13 @@ const AppBar = () => {
       <ScrollView horizontal>
         <LinkText to={'/'}>Repositories</LinkText>
         {!user ? (
-          <LinkText to={'/signin'}>Sign in</LinkText>
+          <>
+            <LinkText to={'/signin'}>Sign in</LinkText>
+            <LinkText to={'/signup'}>Sign up</LinkText>
+          </>
         ) : (
           <>
+            <LinkText to={'/review'}>Create a review</LinkText>
             <Pressable onPress={handleSignOut}>
               <Text style={styles.text}>Sign out</Text>
             </Pressable>

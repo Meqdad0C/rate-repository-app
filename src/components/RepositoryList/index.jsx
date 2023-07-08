@@ -1,10 +1,9 @@
-import { FlatList, View, StyleSheet, Pressable } from 'react-native'
+import { FlatList, View, StyleSheet } from 'react-native'
 import RepositoryItemContainer from './RepositoryItem'
 import { useQuery } from '@apollo/client'
 import { ALL_REPOSIORIES } from '../../graphql/queries'
 import LoadingSpinner from '../LoadingSpinner'
 import ErrorPage from '../ErrorPage'
-import { useNavigate } from 'react-router-native'
 
 const styles = StyleSheet.create({
   separator: {
@@ -25,7 +24,7 @@ export const RepositoryListContainer = ({ repositories }) => {
   )
 }
 
-const ItemSeparator = () => <View style={styles.separator} />
+export const ItemSeparator = () => <View style={styles.separator} />
 
 const RepositoryList = () => {
   const { data, error, loading } = useQuery(ALL_REPOSIORIES, {

@@ -122,7 +122,7 @@ const RepositoryView = () => {
   const id = useParams().id
   const { data, loading } = useQuery(SINGLE_REPOSITORY, {
     variables: { id },
-    fetchPolicy: 'cache',
+    fetchPolicy: 'cache and network',
   })
 
   if (loading) {
