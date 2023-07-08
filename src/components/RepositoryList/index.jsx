@@ -4,13 +4,38 @@ import { useQuery } from '@apollo/client'
 import { ALL_REPOSIORIES } from '../../graphql/queries'
 import LoadingSpinner from '../LoadingSpinner'
 import ErrorPage from '../ErrorPage'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { Searchbar } from 'react-native-paper'
+import { useDebounce } from 'use-debounce'
 import { useNavigate } from 'react-router-native'
 const styles = StyleSheet.create({
   separator: {
     height: 10,
   },
 })
+
+const SearchBar = ({ refetch }) => {
+  const [searchQuery, setSearchQuery] = useState('')
+  const [debouncedText] = useDebounce(searchQuery, 500)
+
+  const onChangeSearch = (query) => setSearchQuery(query)
+  console.log(debouncedText)
+
+  useEffect(() => {
+    if (debouncedText) {
+      refetch({ searchKeyword: debouncedText })
+      console.log('refetching... ', debouncedText)
+    }
+  }, [debouncedText])
+
+  return (
+    <Searchbar
+      placeholder="Search"
+      onChangeText={onChangeSearch}
+      value={searchQuery}
+    />
+  )
+}
 
 const Picker = ({ sort }) => {
   const styles = StyleSheet.create({
@@ -35,10 +60,9 @@ const Picker = ({ sort }) => {
       fontSize: 12,
       textAlign: 'center',
     },
-    Pressed : {
+    Pressed: {
       backgroundColor: 'blue',
-    }
-
+    },
   })
   const { setOrder, setDirection } = sort
   return (
@@ -72,7 +96,7 @@ const Picker = ({ sort }) => {
   )
 }
 
-export const RepositoryListContainer = ({ repositories, sort }) => {
+export const RepositoryListContainer = ({ repositories, sort, refetch }) => {
   const repositoryNodes = repositories
     ? repositories.edges.map((edge) => edge.node)
     : []
@@ -80,7 +104,12 @@ export const RepositoryListContainer = ({ repositories, sort }) => {
     <FlatList
       data={repositoryNodes}
       ItemSeparatorComponent={ItemSeparator}
-      ListHeaderComponent={<Picker sort={sort} />}
+      ListHeaderComponent={
+        <>
+          <SearchBar refetch={refetch} />
+          <Picker sort={sort} />
+        </>
+      }
       renderItem={({ item }) => <RepositoryItemContainer {...item} />}
     />
   )
@@ -92,9 +121,9 @@ const RepositoryList = () => {
   const Navigate = useNavigate()
   const [order, setOrder] = useState('CREATED_AT')
   const [direction, setDirection] = useState('DESC')
-  const { data, error, loading } = useQuery(ALL_REPOSIORIES, {
+  const { data, error, loading, refetch } = useQuery(ALL_REPOSIORIES, {
     fetchPolicy: 'cache-and-network',
-    variables: { orderBy: order, orderDirection: direction },
+    variables: { orderBy: order, orderDirection: direction, refetch },
     onError: (error) => {
       console.log(error)
     },
@@ -112,6 +141,7 @@ const RepositoryList = () => {
     <RepositoryListContainer
       repositories={data.repositories}
       sort={{ setOrder, setDirection }}
+      refetch={refetch}
     />
   )
 }
